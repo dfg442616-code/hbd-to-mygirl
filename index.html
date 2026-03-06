@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday My Love</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Kanit', sans-serif;
+            background-color: #fcf0f4;
+            margin: 0; padding: 0;
+            display: flex; justify-content: center; align-items: center;
+            height: 100vh; text-align: center; color: #4a4a4a;
+            overflow: hidden;
+        }
+        .screen {
+            display: none; flex-direction: column; align-items: center;
+            justify-content: center; width: 100%; max-width: 400px;
+            padding: 20px; box-sizing: border-box; animation: fadeIn 1s ease-in-out;
+            z-index: 2;
+        }
+        .active { display: flex; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        h1 { font-size: 22px; color: #333; margin-bottom: 10px; }
+        h2 { font-size: 26px; color: #f28ab2; letter-spacing: 2px; margin-top: 0; }
+        
+        /* Heart Cake */
+        .cake-wrapper { position: relative; margin: 50px 0; cursor: pointer; }
+        .heart-cake {
+            width: 150px; height: 130px;
+            background-color: #ffb6c1; /* ชมพู */
+            position: relative; transform: rotate(-45deg);
+            box-shadow: -10px 10px 20px rgba(0,0,0,0.1);
+        }
+        .heart-cake::before, .heart-cake::after {
+            content: ""; width: 150px; height: 150px;
+            background-color: #ffb6c1; border-radius: 50%;
+            position: absolute;
+        }
+        .heart-cake::before { top: -75px; left: 0; }
+        .heart-cake::after { left: 75px; top: 0; }
+
+        .candles-container {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; justify-content: center; align-items: center;
+            transform: rotate(45deg); /* หมุนกลับให้เทียนตั้งตรง */
+        }
+        .candle {
+            width: 8px; height: 35px; background-color: #ffd700;
+            margin: 0 4px; visibility: hidden; position: relative; border-radius: 4px;
+        }
+        .flame {
+            width: 10px; height: 15px; background-color: #ff9d00;
+            border-radius: 50% 50% 20% 20%; position: absolute;
+            top: -12px; left: -1px; animation: flicker 0.6s infinite alternate;
+        }
+        @keyframes flicker { from { transform: scale(1); } to { transform: scale(1.2); } }
+
+        /* Envelope & Letter */
+        .envelope {
+            width: 200px; height: 130px; background-color: #ffcce6;
+            position: relative; margin: 30px 0; border-radius: 10px;
+        }
+        .envelope::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0;
+            border-top: 65px solid #f28ab2; border-left: 100px solid transparent; border-right: 100px solid transparent;
+        }
+        .letter-content {
+            background: white; padding: 20px; border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1); text-align: left;
+            max-height: 60vh; overflow-y: auto; border: 2px solid #ffe6f2;
+        }
+
+        button.btn {
+            background-color: #f28ab2; color: white; border: none;
+            padding: 10px 20px; border-radius: 20px; font-family: 'Kanit';
+            margin-top: 15px; cursor: pointer;
+        }
+
+        .heart-rain {
+            position: fixed; top: -10%; color: #f28ab2;
+            animation: fall linear forwards; z-index: 1;
+        }
+        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+    <div id="screen1" class="screen active">
+        <h1>สุขสันต์วันเกิดนะคะแฟน 🎂💖</h1>
+        <h2>HAPPY BIRTHDAY</h2>
+        <div style="border: 4px dashed #f28ab2; padding: 40px; border-radius: 20px; background: white; cursor: pointer;" onclick="showScreen('screen2')">
+            <span style="font-size: 50px;">🎁</span><br><b>จิ้มตรงนี้เลย</b>
+        </div>
+    </div>
+
+    <div id="screen2" class="screen">
+        <h1 id="cake-text">จิ้มที่เค้กเพื่อปักเทียน!</h1>
+        <div class="cake-wrapper" onclick="addCandle()">
+            <div class="heart-cake"></div>
+            <div class="candles-container">
+                <div class="candle"><div class="flame"></div></div>
+                <div class="candle"><div class="flame"></div></div>
+                <div class="candle"><div class="flame"></div></div>
+                <div class="candle"><div class="flame"></div></div>
+                <div class="candle"><div class="flame"></div></div>
+            </div>
+        </div>
+        <button id="blow-btn" class="btn" style="display:none;" onclick="blowCandles()">เป่าเค้กเลย! 💨</button>
+    </div>
+
+    <div id="screen3" class="screen">
+        <h1>มีจดหมายถึงหนูด้วย กดดูสิ! 💌</h1>
+        <div class="envelope" onclick="startHearts(); showScreen('screen4');">
+            <div style="position:absolute; top:55%; left:50%; transform:translate(-50%,-50%); color:white; font-size:30px;">🤍</div>
+        </div>
+    </div>
+
+    <div id="screen4" class="screen">
+        <div class="letter-content">
+            <h2 style="font-size:20px; text-align:center; color:#f28ab2;">Happy birthday to my love</h2>
+            <p style="font-size:14px; color:#555; line-height: 1.8;">
+                โตขึ้นอีกปีแล้วนะครับ ขอให้หนูมีความสุขเยอะๆนะครับยิ้มเยอะๆขอให้วันเกิดครบรอบ14ปีของหนูเป็นปีที่มีความสุขนะครับ<br><br>
+                พี่จะอยู่แฮปหนูหนูไปทุกปีเลยครับ เพราะพี่จะอยู่ดูแลหนูตลอดไปเลยครับ วันเกิดปีนี้ ขอให้ทุกๆอย่างที่ทำอยู่ ประสบความสำเร็จเป็นไปตามที่หวังตั้งใจ<br><br>
+                พี่ขอให้หนูมีความสุข มีรอยยิ้มในทุกๆวัน สุขภาพร่างกายแข็งแรง ขอให้คนรอบข้างที่รักหนูนะครับ และขอให้หนูทำตัวน่ารักแบบนี้ไปนานๆนะครับ และขอให้อยู่ด้วยกันแบบนี้ไปนานๆ ขอบคุณที่เป็นแฟนที่ดีของพี่นะครับ และ ขอบคุณที่เกิดมาให้รักนะคะ รักน้าค้าบบบคุณแฟนนนน😻❤️💐
+            </p>
+        </div>
+    </div>
+
+    <script>
+        let candleCount = 0;
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+        function addCandle() {
+            const candles = document.querySelectorAll('.candle');
+            if (candleCount < 5) {
+                candles[candleCount].style.visibility = 'visible';
+                candleCount++;
+                if (candleCount === 5) {
+                    document.getElementById('cake-text').innerText = "อธิษฐานแล้วเป่าเลย";
+                    document.getElementById('blow-btn').style.display = 'block';
+                }
+            }
+        }
+        function blowCandles() {
+            document.querySelectorAll('.flame').forEach(f => f.style.display = 'none');
+            document.getElementById('cake-text').innerText = "ฟู่~ 💨";
+            setTimeout(() => showScreen('screen3'), 1500);
+        }
+        function startHearts() {
+            setInterval(() => {
+                const h = document.createElement('div');
+                h.classList.add('heart-rain');
+                h.innerHTML = '❤️';
+                h.style.left = Math.random() * 100 + 'vw';
+                h.style.animationDuration = (Math.random() * 2 + 3) + 's';
+                document.body.appendChild(h);
+                setTimeout(() => h.remove(), 5000);
+            }, 300);
+        }
+    </script>
+</body>
+</html>
