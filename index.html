@@ -3,87 +3,181 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday My Love</title>
+    <title>Happy Birthday</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Kanit', sans-serif;
-            background-color: #fcf0f4;
-            margin: 0; padding: 0;
-            display: flex; justify-content: center; align-items: center;
-            height: 100vh; text-align: center; color: #4a4a4a;
-            overflow: hidden;
+            background-color: #fcf0f4; /* พื้นหลังสีชมพูอ่อนๆ ให้เข้ากับเค้ก */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            color: #4a4a4a;
         }
+
         .screen {
-            display: none; flex-direction: column; align-items: center;
-            justify-content: center; width: 100%; max-width: 400px;
-            padding: 20px; box-sizing: border-box; animation: fadeIn 1s ease-in-out;
-            z-index: 2;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            box-sizing: border-box;
+            animation: fadeIn 1s ease-in-out;
         }
-        .active { display: flex; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        h1 { font-size: 22px; color: #333; margin-bottom: 10px; }
-        h2 { font-size: 26px; color: #f28ab2; letter-spacing: 2px; margin-top: 0; }
+        .active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 { font-size: 24px; color: #333; margin-bottom: 10px; }
+        h2 { font-size: 28px; color: #f28ab2; letter-spacing: 2px; margin-top: 0; }
+        p { font-size: 16px; line-height: 1.6; }
+
+        .clickable {
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .clickable:hover {
+            transform: scale(1.05);
+        }
+
+        /* กล่องจำลอง QR Code */
+        .qr-box {
+            width: 200px;
+            height: 200px;
+            border: 4px dashed #f28ab2;
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+            background-color: white;
+            color: #f28ab2;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(242, 138, 178, 0.2);
+        }
+
+        /* เค้กสีชมพูรูปหัวใจตกแต่งสวยงาม */
+        .cake-wrapper {
+            position: relative;
+            margin: 60px 0 40px 0;
+        }
         
-        /* Heart Cake */
-        .cake-wrapper { position: relative; margin: 50px 0; cursor: pointer; }
-        .heart-cake {
-            width: 150px; height: 130px;
-            background-color: #ffb6c1; /* ชมพู */
-            position: relative; transform: rotate(-45deg);
-            box-shadow: -10px 10px 20px rgba(0,0,0,0.1);
+        .cake {
+            width: 220px;
+            height: 130px;
+            background-color: #ffb6c1; /* ตัวเค้กสีชมพู */
+            border-radius: 20px 20px 10px 10px;
+            position: relative;
+            border-top: 35px solid #fff0f5; /* คครีมแต่งหน้าเค้กสีขาวอมชมพู */
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
         }
-        .heart-cake::before, .heart-cake::after {
-            content: ""; width: 150px; height: 150px;
-            background-color: #ffb6c1; border-radius: 50%;
+
+        .plate {
+            width: 260px;
+            height: 40px;
+            background-color: #e6dadd; /* จานรองเค้กสีม่วงอ่อน */
+            border-radius: 50%;
             position: absolute;
+            bottom: -15px;
+            left: -20px;
+            z-index: -1;
         }
-        .heart-cake::before { top: -75px; left: 0; }
-        .heart-cake::after { left: 75px; top: 0; }
 
+        /* เทียน (แก้บัคแล้ว) */
         .candles-container {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; justify-content: center; align-items: center;
-            transform: rotate(45deg); /* หมุนกลับให้เทียนตั้งตรง */
+            position: absolute;
+            top: -45px;
+            width: 100%;
+            display: flex;
+            justify-content: space-evenly;
+            padding: 0 15px;
+            box-sizing: border-box;
         }
-        .candle {
-            width: 8px; height: 35px; background-color: #ffd700;
-            margin: 0 4px; visibility: hidden; position: relative; border-radius: 4px;
-        }
-        .flame {
-            width: 10px; height: 15px; background-color: #ff9d00;
-            border-radius: 50% 50% 20% 20%; position: absolute;
-            top: -12px; left: -1px; animation: flicker 0.6s infinite alternate;
-        }
-        @keyframes flicker { from { transform: scale(1); } to { transform: scale(1.2); } }
 
-        /* Envelope & Letter */
+        .candle {
+            width: 12px;
+            height: 45px;
+            background-color: #e0d0f0; /* เทียนสีม่วงอ่อน */
+            border-radius: 6px;
+            position: relative;
+            visibility: hidden; /* จองพื้นที่ไว้ เทียนจะได้ไม่ขยับ */
+            border: 2px solid white;
+        }
+
+        .flame {
+            width: 14px;
+            height: 22px;
+            background-color: #ffd700;
+            border-radius: 50% 50% 20% 20%;
+            position: absolute;
+            top: -18px;
+            left: -3px;
+            animation: flicker 0.6s infinite alternate;
+            box-shadow: 0 0 10px #ff9d00; /* เพิ่มแสงเรืองรองให้ไฟ */
+        }
+
+        @keyframes flicker {
+            0% { transform: scale(1); opacity: 0.8; }
+            100% { transform: scale(1.1); opacity: 1; }
+        }
+
+        /* ซองจดหมาย */
         .envelope {
-            width: 200px; height: 130px; background-color: #ffcce6;
-            position: relative; margin: 30px 0; border-radius: 10px;
+            width: 250px;
+            height: 160px;
+            background-color: #ffcce6;
+            position: relative;
+            margin: 30px 0;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
         .envelope::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0;
-            border-top: 65px solid #f28ab2; border-left: 100px solid transparent; border-right: 100px solid transparent;
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            border-top: 80px solid #f28ab2;
+            border-left: 125px solid transparent;
+            border-right: 125px solid transparent;
         }
+
+        /* ข้อความจดหมาย */
         .letter-content {
-            background: white; padding: 20px; border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1); text-align: left;
-            max-height: 60vh; overflow-y: auto; border: 2px solid #ffe6f2;
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            text-align: left;
+            border: 2px solid #ffe6f2;
         }
 
         button.btn {
-            background-color: #f28ab2; color: white; border: none;
-            padding: 10px 20px; border-radius: 20px; font-family: 'Kanit';
-            margin-top: 15px; cursor: pointer;
+            background-color: #f28ab2;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-family: 'Kanit', sans-serif;
+            cursor: pointer;
+            margin-top: 20px;
+            box-shadow: 0 4px 6px rgba(242, 138, 178, 0.3);
+            transition: background-color 0.3s;
         }
-
-        .heart-rain {
-            position: fixed; top: -10%; color: #f28ab2;
-            animation: fall linear forwards; z-index: 1;
+        button.btn:hover {
+            background-color: #e0729b;
         }
-        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
     </style>
 </head>
 <body>
@@ -91,37 +185,42 @@
     <div id="screen1" class="screen active">
         <h1>สุขสันต์วันเกิดนะคะแฟน 🎂💖</h1>
         <h2>HAPPY BIRTHDAY</h2>
-        <div style="border: 4px dashed #f28ab2; padding: 40px; border-radius: 20px; background: white; cursor: pointer;" onclick="showScreen('screen2')">
-            <span style="font-size: 50px;">🎁</span><br><b>จิ้มตรงนี้เลย</b>
+        <div class="qr-box clickable" onclick="showScreen('screen2')">
+            แตะที่นี่เพื่อเริ่มเลย!
         </div>
+        <p style="color: #888;">(กดที่กรอบสี่เหลี่ยมด้านบน)</p>
     </div>
 
     <div id="screen2" class="screen">
-        <h1 id="cake-text">จิ้มที่เค้กเพื่อปักเทียน!</h1>
-        <div class="cake-wrapper" onclick="addCandle()">
-            <div class="heart-cake"></div>
-            <div class="candles-container">
-                <div class="candle"><div class="flame"></div></div>
-                <div class="candle"><div class="flame"></div></div>
-                <div class="candle"><div class="flame"></div></div>
-                <div class="candle"><div class="flame"></div></div>
-                <div class="candle"><div class="flame"></div></div>
+        <h1 id="cake-text">กดที่เค้กสิ!</h1>
+        
+        <div class="cake-wrapper clickable" onclick="addCandle()">
+            <div class="cake">
+                <div class="candles-container" id="candles">
+                    <div class="candle"><div class="flame"></div></div>
+                    <div class="candle"><div class="flame"></div></div>
+                    <div class="candle"><div class="flame"></div></div>
+                    <div class="candle"><div class="flame"></div></div>
+                    <div class="candle"><div class="flame"></div></div>
+                </div>
             </div>
+            <div class="plate"></div>
         </div>
+
         <button id="blow-btn" class="btn" style="display:none;" onclick="blowCandles()">เป่าเค้กเลย! 💨</button>
     </div>
 
     <div id="screen3" class="screen">
-        <h1>มีจดหมายถึงหนูด้วย กดดูสิ! 💌</h1>
-        <div class="envelope" onclick="startHearts(); showScreen('screen4');">
-            <div style="position:absolute; top:55%; left:50%; transform:translate(-50%,-50%); color:white; font-size:30px;">🤍</div>
+        <h1>อยากอ่านมั้ย กดที่ซองสิ! 💌</h1>
+        <div class="envelope clickable" onclick="showScreen('screen4')">
+            <div style="position:absolute; top:55%; left:50%; transform:translate(-50%,-50%); color:white; font-size:35px;">🤍</div>
         </div>
     </div>
 
     <div id="screen4" class="screen">
         <div class="letter-content">
-            <h2 style="font-size:20px; text-align:center; color:#f28ab2;">Happy birthday to my love</h2>
-            <p style="font-size:14px; color:#555; line-height: 1.8;">
+            <h2 style="font-size:22px; text-align:center; color:#f28ab2;">Happy birthday to my love</h2>
+            <p style="font-size:15px; color:#555;">
                 โตขึ้นอีกปีแล้วนะครับ ขอให้หนูมีความสุขเยอะๆนะครับยิ้มเยอะๆขอให้วันเกิดครบรอบ14ปีของหนูเป็นปีที่มีความสุขนะครับ<br><br>
                 พี่จะอยู่แฮปหนูหนูไปทุกปีเลยครับ เพราะพี่จะอยู่ดูแลหนูตลอดไปเลยครับ วันเกิดปีนี้ ขอให้ทุกๆอย่างที่ทำอยู่ ประสบความสำเร็จเป็นไปตามที่หวังตั้งใจ<br><br>
                 พี่ขอให้หนูมีความสุข มีรอยยิ้มในทุกๆวัน สุขภาพร่างกายแข็งแรง ขอให้คนรอบข้างที่รักหนูนะครับ และขอให้หนูทำตัวน่ารักแบบนี้ไปนานๆนะครับ และขอให้อยู่ด้วยกันแบบนี้ไปนานๆ ขอบคุณที่เป็นแฟนที่ดีของพี่นะครับ และ ขอบคุณที่เกิดมาให้รักนะคะ รักน้าค้าบบบคุณแฟนนนน😻❤️💐
@@ -131,36 +230,47 @@
 
     <script>
         let candleCount = 0;
-        function showScreen(id) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
+        const totalCandles = 5;
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
         }
+
         function addCandle() {
             const candles = document.querySelectorAll('.candle');
-            if (candleCount < 5) {
+            const cakeText = document.getElementById('cake-text');
+            const blowBtn = document.getElementById('blow-btn');
+
+            if (candleCount < totalCandles) {
+                // แก้บัค: ใช้ visibility แทน display เพื่อไม่ให้เทียนขยับ
                 candles[candleCount].style.visibility = 'visible';
                 candleCount++;
-                if (candleCount === 5) {
-                    document.getElementById('cake-text').innerText = "อธิษฐานแล้วเป่าเลย";
-                    document.getElementById('blow-btn').style.display = 'block';
+
+                if (candleCount === 1) cakeText.innerText = "ปักอีกสิคะ";
+                else if (candleCount === 2) cakeText.innerText = "ปักอีกนิดนึง";
+                else if (candleCount === 3) cakeText.innerText = "ใกล้ครบแล้ว";
+                else if (candleCount === 4) cakeText.innerText = "อีกเล่มเดียว!";
+                else if (candleCount === 5) {
+                    cakeText.innerText = "เย้!! อธิษฐานแล้วเป่าเลย";
+                    blowBtn.style.display = 'block'; // แสดงปุ่มเป่าเค้ก
                 }
             }
         }
+
         function blowCandles() {
-            document.querySelectorAll('.flame').forEach(f => f.style.display = 'none');
+            const flames = document.querySelectorAll('.flame');
+            flames.forEach(flame => flame.style.display = 'none'); // ดับไฟเทียน
+            
             document.getElementById('cake-text').innerText = "ฟู่~ 💨";
-            setTimeout(() => showScreen('screen3'), 1500);
-        }
-        function startHearts() {
-            setInterval(() => {
-                const h = document.createElement('div');
-                h.classList.add('heart-rain');
-                h.innerHTML = '❤️';
-                h.style.left = Math.random() * 100 + 'vw';
-                h.style.animationDuration = (Math.random() * 2 + 3) + 's';
-                document.body.appendChild(h);
-                setTimeout(() => h.remove(), 5000);
-            }, 300);
+            document.getElementById('blow-btn').style.display = 'none';
+
+            // หน่วงเวลา 1.5 วินาทีแล้วไปหน้าซองจดหมาย
+            setTimeout(() => {
+                showScreen('screen3');
+            }, 1500);
         }
     </script>
 </body>
